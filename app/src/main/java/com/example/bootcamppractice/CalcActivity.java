@@ -8,17 +8,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 public class CalcActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button clear, divide, multiply, subtract, add, equals, percent, point;
+    // add logs for hasValue2
+    // check addition after pressing =
+
+    private Button clear, divide, multiply, subtract, add, equals, blank1, blank2, point;
     private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0;
     private ImageButton backspace;
     private EditText display, input;
-    private boolean hasValue = false;
-    private Double val1, val2;
-    private String holder, symbol;
+    private int iresult, ival1, ival2;
+    private Double result, val1, val2;
+    private String symbol;
+    private boolean isWhole = false;
+    private boolean equalsFlag = false;
+    private boolean hasValue1 = false;
+    private boolean hasValue2 = false;
 
 
 
@@ -33,7 +40,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         subtract = findViewById(R.id.btnSubtract);
         add = findViewById(R.id.btnAdd);
         equals = findViewById(R.id.btnEquals);
-        percent = findViewById(R.id.btnPercent);
+        blank1 = findViewById(R.id.btnBlank1);
+        blank2 = findViewById(R.id.btnBlank2);
         point = findViewById(R.id.btnPoint);
         btn0 = findViewById(R.id.btn0);
         btn1 = findViewById(R.id.btn1);
@@ -57,7 +65,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         subtract.setOnClickListener(this);
         add.setOnClickListener(this);
         equals.setOnClickListener(this);
-        percent.setOnClickListener(this);
+        blank1.setOnClickListener(this);
+        blank2.setOnClickListener(this);
         point.setOnClickListener(this);
 
         btn0.setOnClickListener(this);
@@ -73,45 +82,159 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void trigger(){
-        if (val2 == null) {
-            hasValue = false;
+    public boolean checkV1Whole() {
+        if (Integer.parseInt(input.getText().toString()) == (int)Integer.parseInt(input.getText().toString())){
+            //Integer.parseInt(input.getText().toString()) % 1 == 0
+            isWhole = true;
+            return true;
         }
         else {
-            hasValue = true;
+            isWhole = false;
+            return false;
+        }
+    }
+    public boolean checkV2Whole(String symbol) {
+        if (input.getText().toString().contains("+")) {
+            if (Integer.parseInt(TextUtils.substring(input.getText().toString(),
+                    input.getText().toString().indexOf("+") + 1,
+                    input.getText().toString().length())) == (int)Integer.parseInt(TextUtils.substring(input.getText().toString(),
+                    input.getText().toString().indexOf("+") + 1,
+                    input.getText().toString().length()))){
+                //Integer.parseInt(input.getText().toString()) % 1 == 0
+                isWhole = true;
+                return true;
+            }
+            else {
+                isWhole = false;
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public void ifVal1IsWholeThenSet(boolean isTrue) {
+        if (isTrue) {
+            ival1 = Integer.parseInt(input.getText().toString());
+            hasValue1 = true;
+            display.setText(String.valueOf(ival1));
+        }
+        else {
+            val1 = Double.parseDouble(input.getText().toString());
+            hasValue1 = true;
+            display.setText(String.valueOf(val1));
+        }
+    }
+    public void ifVal2IsWholeThenSet(boolean isTrue) {
+        if (isTrue) {
+            ival2 = Integer.parseInt(input.getText().toString());
+            hasValue2 = true;
+        }
+        else {
+            val2 = Double.parseDouble(input.getText().toString());
+            hasValue2 = true;
+        }
+    }
+
+    public void setVal2() {
+        Log.e("setVal Function", "setVal2()");
+        Log.e(String.valueOf(hasValue1), "val1 state");
+        Log.e(String.valueOf(hasValue2), "val2 state");
+
+        if (!hasValue1) {
+            display.setText(input.getText());
+        }
+        else if (!hasValue2) {
+            if (input.getText().toString().contains("+")) {
+                val2 = Double.parseDouble(TextUtils.substring(input.getText().toString(),
+                        input.getText().toString().indexOf("+") + 1,
+                        input.getText().toString().length()));
+                result = equation();
+                display.setText(String.valueOf(result));
+                hasValue2 = true;
+                Log.e("setVal Function +", "setVal2() addition");
+                Log.e(String.valueOf(val2), "setVal2() val2");
+            }
+            else if (input.getText().toString().contains("−")) {
+                if (String.valueOf(val1).contains("−")) {
+                    val2 = Double.parseDouble(TextUtils.substring(input.getText().toString(),
+                            input.getText().toString().indexOf("−",1) + 1,
+                            input.getText().toString().length()));
+                    result = equation();
+                    display.setText(String.valueOf(result));
+                    hasValue2 = true;
+                    Log.e("setVal Function −", "setVal2() subtraction if()");
+                    Log.e(String.valueOf(val2), "setVal2() val2");
+                }
+                else {
+                    val2 = Double.parseDouble(TextUtils.substring(input.getText().toString(),
+                            input.getText().toString().indexOf("−") + 1,
+                            input.getText().toString().length()));
+                    result = equation();
+                    display.setText(String.valueOf(result));
+                    hasValue2 = true;
+                    Log.e("setVal Function −", "setVal2() subtraction else()");
+                    Log.e(String.valueOf(val2), "setVal2() val2");
+                }
+            }
+            else if (input.getText().toString().contains("×")) {
+                val2 = Double.parseDouble(TextUtils.substring(input.getText().toString(),
+                        input.getText().toString().indexOf("×") + 1,
+                        input.getText().toString().length()));
+//                hasValue2 = true;
+                result = equation();
+                display.setText(String.valueOf(result));
+                hasValue2 = true;
+                Log.e("setVal Function ×", "setVal2() multiplication");
+                Log.e(String.valueOf(val2), "setVal2() val2");
+            }
+            else if (input.getText().toString().contains("÷")) {
+                val2 = Double.parseDouble(TextUtils.substring(input.getText().toString(),
+                        input.getText().toString().indexOf("÷") + 1,
+                        input.getText().toString().length()));
+//                hasValue2 = true;
+                result = equation();
+                display.setText(String.valueOf(result));
+                hasValue2 = true;
+                Log.e("setVal Function ÷", "setVal2() division");
+                Log.e(String.valueOf(val2), "setVal2() val2");
+            }
         }
     }
 
     public double equation() {
+        Log.e("Equation Function", "log for equation()");
+        Log.e(String.valueOf(symbol), "symbol for equation()");
+        Log.e(String.valueOf(val1), "val1 value");
+        Log.e(String.valueOf(val2), "val2 value");
         if (symbol == null || symbol.equals("")) {
             return 0;
         }
         else {
-            Log.e(symbol, "equation() else block");
-            if (symbol.equals("÷")) {
-                if (input.getText().toString().equals("") || input.getText().toString().equals("÷")){
-                    Log.e(symbol, "if in else block");
-                    return val1 / 1;
-                }
-            } else {
+            if (symbol.equals("+")) {
+                Log.e(String.valueOf(val1+val2), "equation result");
+                return val1 + val2;
+            }
+            else if (symbol.equals("−")) {
+                return val1 - val2;
+            }
+            else if (symbol.equals("×")) {
+                return val1 * val2;
+            }
+            else if (symbol.equals("÷")) {
                 return val1 / val2;
             }
+            return 0;
         }
-        return 0;
     }
-// flag is true if val2 is not null
+    // flag is true if val2 is not null
 // if flag is true == trigger equation()
     @Override
     public void onClick(View view) {
-
-        if (hasValue) {
-            equation();
-            display.setText((String.valueOf(val2)));
-        }
-//        val2 = equation();
-        Log.e(symbol, "symbol value");
         if(view.getId() == R.id.btnClear) {
             input.getText().clear();
+            display.getText().clear();
+            hasValue1 = false;
+            hasValue2 = false;
         }
         else if(view.getId() == R.id.btnBackspace) {
             String word = input.getText().toString();
@@ -121,125 +244,211 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         else if (view.getId() == R.id.btnDivide) {
-            if(input.getText().toString() != null) {
-                val1 = Integer.valueOf(String.valueOf(input.getText()));
-                input.getText().clear();
-                input.append("÷");
-                this.symbol = "÷";
-                holder = String.valueOf(input.getText());
-//                display.setText(String.valueOf(val1) + " " + holder);
+            if("".equals(input.getText().toString())) {
             }
-            Log.e(String.valueOf(val1), " value 1");
+            else {
+                if (!hasValue1) {
+//                    ifVal1IsWholeThenSet(checkV1Whole());
+                    val1 = Double.parseDouble(input.getText().toString());
+                    hasValue1 = true;
+                    input.append("÷");
+                    display.setText(String.valueOf(val1));
+                }
+                else if (hasValue1 && !hasValue2 && equalsFlag) {
+                    input.append("÷");
+                    equalsFlag = false;
+                }
+                else if (hasValue1 && !hasValue2) {
+                    hasValue2 = false;
+                    input.setText(String.valueOf(display.getText()));
+                    val1 = Double.parseDouble(input.getText().toString());
+                    input.append("÷");
+                }
+                else if (hasValue1 && hasValue2) {
+                    val1 = Double.parseDouble(display.getText().toString());
+                    hasValue2 = false;
+                    input.setText(String.valueOf(val1));
+                    input.append("÷");
+                }
+                this.symbol = "÷";
+            }
         }
         else if (view.getId() == R.id.btnMultiply) {
-            input.append("×");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            if("".equals(input.getText().toString())) {
+            }
+            else {
+                if (!hasValue1) {
+                    val1 = Double.parseDouble(input.getText().toString());
+                    hasValue1 = true;
+                    input.append("×");
+                    display.setText(String.valueOf(val1));
+                }
+                else if (hasValue1 && !hasValue2 && equalsFlag) {
+                    input.append("×");
+                    equalsFlag = false;
+                }
+                else if (hasValue1 && !hasValue2) {
+                    hasValue2 = false;
+                    input.setText(String.valueOf(display.getText()));
+                    val1 = Double.parseDouble(input.getText().toString());
+                    input.append("×");
+                }
+                else if (hasValue1 && hasValue2) {
+                    val1 = Double.parseDouble(display.getText().toString());
+                    hasValue2 = false;
+                    input.setText(String.valueOf(val1));
+                    input.append("×");
+                }
+                this.symbol = "×";
+            }
         }
         else if (view.getId() == R.id.btnSubtract) {
-            input.append("−");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            if("".equals(input.getText().toString())) {
+                input.append("-");
+            }
+            else {
+                if (!hasValue1) {
+                    val1 = Double.parseDouble(input.getText().toString());
+                    hasValue1 = true;
+                    input.append("−");
+                    display.setText(String.valueOf(val1));
+                    this.symbol = "−";
+                }
+                else if (hasValue1 && !hasValue2 && equalsFlag) {
+                    input.append("−");
+                    equalsFlag = false;
+                    this.symbol = "−";
+                }
+                else if (hasValue1 && !hasValue2) {
+                    if (input.getText().toString().contains("+")) {
+                        input.append("-");
+                    }
+                    else if (input.getText().toString().contains("×")) {
+                        input.append("-");
+                    }
+                    else if (input.getText().toString().contains("÷")) {
+                        input.append("-");
+                    }
+                    else {
+                        hasValue2 = false;
+                        input.setText(String.valueOf(display.getText()));
+                        val1 = Double.parseDouble(input.getText().toString());
+                        input.append("−");
+                        this.symbol = "−";
+                    }
+                }
+                else if (hasValue1 && hasValue2) {
+                    val1 = Double.parseDouble(display.getText().toString());
+                    hasValue2 = false;
+                    input.setText(String.valueOf(val1));
+                    input.append("−");
+                    this.symbol = "−";
+                }
+            }
         }
         else if (view.getId() == R.id.btnAdd) {
-            input.append("+");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            if("".equals(input.getText().toString())) {
+            }
+            else {
+                if (!hasValue1) {
+                    val1 = Double.parseDouble(input.getText().toString());
+                    hasValue1 = true;
+                    input.append("+");
+                    display.setText(String.valueOf(val1));
+                }
+                else if (hasValue1 && !hasValue2 && equalsFlag) {
+                    input.append("+");
+                    equalsFlag = false;
+                }
+                else if (hasValue1 && !hasValue2) {
+                    hasValue2 = false;
+                    input.setText(String.valueOf(display.getText()));
+                    val1 = Double.parseDouble(input.getText().toString());
+                    input.append("+");
+                }
+                else if (hasValue1 && hasValue2) {
+                    val1 = Double.parseDouble(display.getText().toString());
+                    hasValue2 = false;
+                    input.setText(String.valueOf(val1));
+                    input.append("+");
+                }
+                this.symbol = "+";
+            }
         }
         else if (view.getId() == R.id.btnEquals) {
-            input.append("=");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
-        }
-        else if (view.getId() == R.id.btnPercent) {
-            input.append("%");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            input.setText(display.getText());
+            display.getText().clear();
+            val1 = Double.parseDouble(input.getText().toString());
+            hasValue2 = false;
+            equalsFlag = true;
+            Log.e(String.valueOf(val1), "val1 after equals");
+            Log.e(String.valueOf(val2), "val2 after equals");
+            Log.e(String.valueOf(input.getText()), "input value after equals");
+            Log.e(String.valueOf(display.getText()), "display value after equals");
         }
         else if (view.getId() == R.id.btnPoint) {
             input.append(".");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            hasValue2 = false;
+        }
+        else if (view.getId() == R.id.btnBlank1) {
+            Toast toast=Toast.makeText(getApplicationContext(),":P",Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        else if (view.getId() == R.id.btnBlank2) {
+            Toast toast=Toast.makeText(getApplicationContext(),"P:",Toast.LENGTH_SHORT);
+            toast.show();
         }
 
 
         else if (view.getId() == R.id.btn0) {
-            if (input.getText().toString().equals("÷")) {
-                input.getText().clear();
-                input.append("0");
-                holder = String.valueOf(input.getText());
-            }
-            else {
-                input.append("0");
-                holder = String.valueOf(input.getText());
-                Log.e(holder, " holder value");
-            }
+            hasValue2 = false;
+            input.append("0");
+            setVal2();
         }
         else if (view.getId() == R.id.btn1) {
-            if (input.getText().toString().equals("÷")) {
-                input.getText().clear();
-                input.append("1");
-                holder = String.valueOf(input.getText());
-            }
-            else {
-                input.append("1");
-                holder = String.valueOf(input.getText());
-                Log.e(holder, " holder value");
-            }
+            hasValue2 = false;
+            input.append("1");
+            setVal2();
         }
         else if (view.getId() == R.id.btn2) {
-            if (input.getText().toString().equals("÷")) {
-                input.getText().clear();
-                input.append("2");
-                holder = String.valueOf(input.getText());
-            }
-            else {
-                input.append("2");
-                holder = String.valueOf(input.getText());
-                Log.e(holder, " holder value");
-            }
+            hasValue2 = false;
+            input.append("2");
+            setVal2();
         }
         else if (view.getId() == R.id.btn3) {
-            if (input.getText().toString().equals("÷")) {
-                input.getText().clear();
-                input.append("3");
-                holder = String.valueOf(input.getText());
-            }
-            else {
-                input.append("3");
-                holder = String.valueOf(input.getText());
-                Log.e(holder, " holder value");
-            }
+            hasValue2 = false;
+            input.append("3");
+            setVal2();
         }
         else if (view.getId() == R.id.btn4) {
+            hasValue2 = false;
             input.append("4");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            setVal2();
         }
         else if (view.getId() == R.id.btn5) {
+            hasValue2 = false;
             input.append("5");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            setVal2();
         }
         else if (view.getId() == R.id.btn6) {
+            hasValue2 = false;
             input.append("6");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            setVal2();
         }
         else if (view.getId() == R.id.btn7) {
+            hasValue2 = false;
             input.append("7");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            setVal2();
         }
         else if (view.getId() == R.id.btn8) {
+            hasValue2 = false;
             input.append("8");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            setVal2();
         }
         else if (view.getId() == R.id.btn9) {
+            hasValue2 = false;
             input.append("9");
-            holder = String.valueOf(input.getText());
-            Log.e(holder, " holder value");
+            setVal2();
         }
 
 
