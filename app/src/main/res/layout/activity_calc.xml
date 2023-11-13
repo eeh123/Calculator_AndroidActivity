@@ -26,7 +26,11 @@
             android:textSize="52sp"
             android:textColor="@color/white"
             android:textAlignment="textEnd"
-            android:background="@null"/>
+            android:background="@null"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
+            android:inputType="text"
+            android:cursorVisible="false"/>
 
         <EditText
             android:id="@+id/tv_display"
@@ -37,7 +41,8 @@
             android:textSize="34sp"
             android:textColor="#b3b3b3"
             android:textAlignment="textEnd"
-            android:background="@null"/>
+            android:background="@null"
+            android:singleLine="true"/>
 
     </LinearLayout>
 

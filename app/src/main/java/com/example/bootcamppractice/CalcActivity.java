@@ -13,6 +13,9 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 public class CalcActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -75,6 +78,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         display = findViewById(R.id.tv_display);
         input = findViewById(R.id.tv_input);
 
+//        input.setEnabled(false);
+        display.setEnabled(false);
 
         clear.setOnClickListener(this);
         backspace.setOnClickListener(this);
@@ -258,11 +263,29 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             hasValue2 = true;
         }
     }
-    public String checkIfWhole(double result) {
+    public String checkIfWhole(double result) {        //String.valueOf(result).length() > 15
         if (result % 1 == 0) {
-            return String.valueOf(BigDecimal.valueOf(result).toBigInteger());
+            if (BigDecimal.valueOf(result).scale() < -3) {
+                BigInteger bIntResult = BigDecimal.valueOf(result).toBigInteger();
+//                String exponentialForm = bIntResult.toString() + "E" + bIntResult.toString().length();
+
+                // Format the result
+                DecimalFormat decimalFormat = new DecimalFormat("0.#############E0"); // Adjust the format as needed
+                String formattedResult = decimalFormat.format(bIntResult);
+
+                return formattedResult;
+//                return String.valueOf(BigDecimal.valueOf(result).toBigInteger());
+            }
+            return String.valueOf(BigDecimal.valueOf(result).toBigInteger()); //returns a whole number
         }
-        return String.valueOf(BigDecimal.valueOf(result));
+        else {
+            if (BigDecimal.valueOf(result).scale() > 5) { //rounds result if its decimal place exceeds 5 decimal places
+                double roundResult = Math.round(result * 100000.0) / 100000.0; //rounds to the 5th decimal place
+//                return String.valueOf(BigDecimal.valueOf(roundResult));
+                return String.valueOf(BigDecimal.valueOf(result).setScale(5, RoundingMode.HALF_UP));
+            }
+            return String.valueOf(BigDecimal.valueOf(result));
+        }
     }
     public void setVal2() {
         Log.e("setVal Function", "setVal2()");
@@ -500,6 +523,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
+        input.setSelection(input.getText().length());
         Log.e("Onlickstats checker(): ", checker.toString());
         Log.e("Onlickstats symbol(): ", symbol.toString());
         if (val1 != null){
