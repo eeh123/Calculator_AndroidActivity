@@ -12,6 +12,8 @@ import android.text.TextUtils;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+
 public class CalcActivity extends AppCompatActivity implements View.OnClickListener {
 
 //    private static final String inputPattern = "^[-]?\\d+(\\.\\d+)?([+\\-*/]\\d+(\\.\\d+)?)?$";
@@ -97,6 +99,13 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         btn9.setOnClickListener(this);
 
     }
+    public void advanceCheckerStatus() {
+        if (checker == Checker.val1NoVal2) {
+            checker = Checker.val1Val2;
+        } else if (checker == Checker.noVal1) {
+            checker = Checker.val1NoVal2;
+        }
+    }
     public void appendIfNotSucceeding(String inputString, String appendingChar) {
         if (!(inputString.endsWith(appendingChar))) {
             input.append(appendingChar);
@@ -105,6 +114,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     public void checker(Symbol symVal, String symbol) {
         Log.e("Inside checker()", "checker() function");
         Log.e(String.valueOf(checker), "curr checker val");
+        advanceCheckerStatus();
         switch (checker) {
             case empty:
                 break;
@@ -139,6 +149,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     public void checkerForSubtract() {
         int length = input.getText().length();
         Log.e(String.valueOf(length), "length of input");
+        if (checker == Checker.val1NoVal2) {
+            checker = Checker.val1Val2;
+        }
         switch (checker) {
             case empty:
                 if (input.getText().toString().equals("")) {
@@ -245,6 +258,12 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             hasValue2 = true;
         }
     }
+    public String checkIfWhole(double result) {
+        if (result % 1 == 0) {
+            return String.valueOf(BigDecimal.valueOf(result).toBigInteger());
+        }
+        return String.valueOf(BigDecimal.valueOf(result));
+    }
     public void setVal2() {
         Log.e("setVal Function", "setVal2()");
         Log.e(String.valueOf(checker), "checker state");
@@ -264,7 +283,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                 input.getText().toString().indexOf("+") + 1,
                                 input.getText().toString().length()));
                         result = equation();
-                        display.setText(String.valueOf(result));
+                        display.setText(checkIfWhole(result));
                         Log.e("setVal Function +", "setVal2() addition");
                         Log.e(String.valueOf(val2), "setVal2() val2");
                         break;
@@ -278,7 +297,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                     input.getText().toString().indexOf("-",1) + 1,
                                     input.getText().toString().length()));
                             result = equation();
-                            display.setText(String.valueOf(result));
+                            display.setText(checkIfWhole(result));
+//                            display.setText(String.valueOf(result));
                             Log.e(String.valueOf(result), "setVal2() val2");
                         }
                         else {
@@ -287,7 +307,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                     input.getText().toString().indexOf("-") + 1,
                                     input.getText().toString().length()));
                             result = equation();
-                            display.setText(String.valueOf(result));
+                            display.setText(checkIfWhole(result));
+//                            display.setText(String.valueOf(result));
                             Log.e("setVal Function −", "setVal2() subtraction else()");
                             Log.e(String.valueOf(val2), "setVal2() val2");
                         }
@@ -298,7 +319,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                 input.getText().toString().indexOf("×") + 1,
                                 input.getText().toString().length()));
                         result = equation();
-                        display.setText(String.valueOf(result));
+                        display.setText(checkIfWhole(result));
+//                        display.setText(String.valueOf(result));
                         Log.e("setVal Function ×", "setVal2() multiplication");
                         Log.e(String.valueOf(val2), "setVal2() val2");
                         break;
@@ -308,12 +330,13 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                 input.getText().toString().indexOf("÷") + 1,
                                 input.getText().toString().length()));
                         result = equation();
-                        display.setText(String.valueOf(result));
+                        display.setText(checkIfWhole(result));
+//                        display.setText(String.valueOf(result));
                         Log.e("setVal Function ÷", "setVal2() division");
                         Log.e(String.valueOf(val2), "setVal2() val2");
                         break;
                 }
-                checker = Checker.val1Val2;
+//                checker = Checker.val1Val2;
                 break;
         }
     }
@@ -351,10 +374,12 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 display.getText().clear();
                 symbol = Symbol.none;
                 checker = Checker.empty;
+                val1 = 0.0;
                 break;
 
             case R.id.btnBackspace:
                 Log.e("Clicked backspace", "backspace");
+                //check if an operator is deleted then set symbol.none
                 String word = input.getText().toString();
                 int length = word.length();
                 if (length > 0){
@@ -400,6 +425,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnPoint:
 //                input.append(".");
 //                checker = Checker.val1NoVal2;
+//                revertCheckerStatus();
                 appendIfNotSucceeding(input.getText().toString(), ".");
                 break;
 
