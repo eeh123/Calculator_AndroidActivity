@@ -107,6 +107,11 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             display.append(buttonInput);
         }
     }
+    public void checkOperatorIfExists(String inputString, String appendingChar) {
+        if (!(inputString.endsWith(appendingChar))) {
+            input.append(appendingChar);
+        }
+    }
     public void checker(Symbol symVal, String symbol) {
         Log.e("Inside checker()", "checker() function");
         Log.e(String.valueOf(checker), "curr checker val");
@@ -116,29 +121,34 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             case noVal1:
                 val1 = Double.parseDouble(input.getText().toString());
                 checker = Checker.val1NoVal2;
-                input.append(symbol);
+                checkOperatorIfExists(input.getText().toString(),symbol);
+//                input.append(symbol);
                 display.setText(String.valueOf(val1));
                 break;
             case val1NoVal2Equals:
-                input.append(symbol);
+                checkOperatorIfExists(input.getText().toString(),symbol);
+//                input.append(symbol);
                 checker = Checker.val1NoVal2;
                 break;
             case val1NoVal2:
                 input.setText(String.valueOf(display.getText()));
                 val1 = Double.parseDouble(input.getText().toString());
-                input.append(symbol);
+                checkOperatorIfExists(input.getText().toString(),symbol);
+//                input.append(symbol);
                 checker = Checker.val1NoVal2;
                 break;
             case val1Val2:
                 val1 = Double.parseDouble(display.getText().toString());
                 checker = Checker.val1NoVal2;
                 input.setText(String.valueOf(val1));
-                input.append(symbol);
+                checkOperatorIfExists(input.getText().toString(),symbol);
+//                input.append(symbol);
         }
         this.symbol = symVal;
-        Log.e("val1 value: ", val1.toString());
     }
     public void checkerForSubtract() {
+        int length = input.getText().length();
+        Log.e(String.valueOf(length), "length of input");
         switch (checker) {
             case empty:
                 if (input.getText().toString().equals("")) {
@@ -152,7 +162,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 else {
                     val1 = Double.parseDouble(input.getText().toString());
                     checker = Checker.val1NoVal2;
-                    input.append("-");
+                    checkOperatorIfExists(input.getText().toString(),"-");
+//                    input.append("-");
                     display.setText(String.valueOf(val1));
                     this.symbol = Symbol.minus;
                 }
@@ -164,18 +175,22 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case val1NoVal2:
                 if (input.getText().toString().contains("+")) {
-                    input.append("-");
+                    checkOperatorIfExists(input.getText().toString(),"-");
+//                    input.append("-");
                 }
                 else if (input.getText().toString().contains("×")) {
-                    input.append("-");
+                    checkOperatorIfExists(input.getText().toString(),"-");
+//                    input.append("-");
                 }
                 else if (input.getText().toString().contains("÷")) {
-                    input.append("-");
+                    checkOperatorIfExists(input.getText().toString(),"-");
+//                    input.append("-");
                 }
                 else {
                     input.setText(String.valueOf(display.getText()));
                     val1 = Double.parseDouble(input.getText().toString());
-                    input.append("−");
+                    checkOperatorIfExists(input.getText().toString(),"-");
+//                    input.append("−");
                     this.symbol = Symbol.minus;
                 }
                 break;
@@ -183,7 +198,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 val1 = Double.parseDouble(display.getText().toString());
                 checker = Checker.val1NoVal2;
                 input.setText(String.valueOf(val1));
-                input.append("−");
+                checkOperatorIfExists(input.getText().toString(),"-");
+//                input.append("−");
                 this.symbol = Symbol.minus;
                 break;
         }
