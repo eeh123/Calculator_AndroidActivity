@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 public class CalcActivity extends AppCompatActivity implements View.OnClickListener {
 
+//    private static final String inputPattern = "^[-]?\\d+(\\.\\d+)?([+\\-*/]\\d+(\\.\\d+)?)?$";
+    private static final String inputPattern = "^[-]?\\d+(\\.\\d+)?$";
     private enum Symbol {
         plus,
         minus,
@@ -21,7 +23,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         divide,
         none
     }
-    private  Symbol symbol = Symbol.none;
+    private Symbol symbol = Symbol.none;
     private enum Checker {
         empty,
         noVal1,
@@ -96,6 +98,15 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void checkInput(String buttonInput) { //NOT WORKING!!!
+        //add regex
+        String chkInput = input.getText().toString()+buttonInput;
+        Log.e("chkInput val", chkInput);
+        if (chkInput.matches(inputPattern)) {
+            input.append(buttonInput);
+            display.append(buttonInput);
+        }
+    }
     public void checker(Symbol symVal, String symbol) {
         Log.e("Inside checker()", "checker() function");
         Log.e(String.valueOf(checker), "curr checker val");
@@ -125,11 +136,14 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 input.append(symbol);
         }
         this.symbol = symVal;
+        Log.e("val1 value: ", val1.toString());
     }
     public void checkerForSubtract() {
         switch (checker) {
             case empty:
-                input.append("-");
+                if (input.getText().toString().equals("")) {
+                    input.append("-");
+                }
                 break;
             case noVal1:
                 if (input.getText().toString().equals("")) {
@@ -251,15 +265,15 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
 
                     case minus:
                         Log.e("Inside case -", "case -");
-                        if (String.valueOf(val1).contains("−")) {
+                        Log.e("val1 value", val1.toString());
+                        if (String.valueOf(val1).contains("-")) {
                             Log.e("If block", "if");
                             val2 = Double.parseDouble(TextUtils.substring(input.getText().toString(),
-                                    input.getText().toString().indexOf("−",1) + 1,
+                                    input.getText().toString().indexOf("-",1) + 1,
                                     input.getText().toString().length()));
                             result = equation();
                             display.setText(String.valueOf(result));
-                            Log.e("setVal Function −", "setVal2() subtraction if()");
-                            Log.e(String.valueOf(val2), "setVal2() val2");
+                            Log.e(String.valueOf(result), "setVal2() val2");
                         }
                         else {
                             Log.e("Else block", "else");
@@ -307,7 +321,6 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             if (symbol == Symbol.plus) {
-                Log.e(String.valueOf(val1+val2), "equation result");
                 return val1 + val2;
             }
             else if (symbol == Symbol.minus) {
@@ -330,7 +343,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("Clicked clear", "clear");
                 input.getText().clear();
                 display.getText().clear();
-                checker = Checker.noVal1;
+                symbol = Symbol.none;
+                checker = Checker.empty;
                 break;
 
             case R.id.btnBackspace:
@@ -345,11 +359,13 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnDivide:
                 Log.e("Clicked ÷", "÷");
                 checker(Symbol.divide,"÷");
+//                checker = Checker.val1NoVal2;
                 break;
 
             case R.id.btnMultiply:
                 Log.e("Clicked ×", "×");
                 checker(Symbol.multiply,"×");
+//                checker = Checker.val1NoVal2;
                 break;
 
             case R.id.btnSubtract:
@@ -360,12 +376,14 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnAdd:
                 Log.e("Clicked +", "+");
                 checker(Symbol.plus,"+");
+//                checker = Checker.val1NoVal2;
                 break;
 
             case R.id.btnEquals:
                 input.setText(display.getText());
                 display.getText().clear();
                 val1 = Double.parseDouble(input.getText().toString());
+                symbol = Symbol.none;
                 checker = Checker.val1NoVal2Equals;
                 Log.e(String.valueOf(val1), "val1 after equals");
                 Log.e(String.valueOf(val2), "val2 after equals");
@@ -374,8 +392,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btnPoint:
-                input.append(".");
-                checker = Checker.val1NoVal2;
+//                input.append(".");
+//                checker = Checker.val1NoVal2;
+                checkInput(".");
                 break;
 
             case R.id.btnBlank1:
@@ -390,53 +409,69 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn0:
                 input.append("0");
+//                checkInput("0");
                 setVal2();
                 break;
 
             case R.id.btn1:
                 input.append("1");
+//                checkInput("1");
                 setVal2();
                 break;
 
             case R.id.btn2:
                 input.append("2");
+//                checkInput("2");
                 setVal2();
                 break;
 
             case R.id.btn3:
                 input.append("3");
+//                checkInput("3");
                 setVal2();
                 break;
 
             case R.id.btn4:
                 input.append("4");
+//                checkInput("4");
                 setVal2();
                 break;
 
             case R.id.btn5:
                 input.append("5");
+//                checkInput("5");
                 setVal2();
                 break;
 
             case R.id.btn6:
                 input.append("6");
+//                checkInput("6");
                 setVal2();
                 break;
 
             case R.id.btn7:
                 input.append("7");
+//                checkInput("7");
                 setVal2();
                 break;
 
             case R.id.btn8:
                 input.append("8");
+//                checkInput("8");
                 setVal2();
                 break;
 
             case R.id.btn9:
                 input.append("9");
+//                checkInput("9");
                 setVal2();
                 break;
+        }
+
+        Log.e("Onlickstats checker(): ", checker.toString());
+        Log.e("Onlickstats symbol(): ", symbol.toString());
+        if (val1 != null){
+            Log.e("val1 value: ", val1.toString());
         }
 
     }
