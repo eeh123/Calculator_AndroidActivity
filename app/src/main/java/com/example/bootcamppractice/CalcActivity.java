@@ -87,10 +87,11 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         multiply.setOnClickListener(this);
         subtract.setOnClickListener(this);
         add.setOnClickListener(this);
+        point.setOnClickListener(this);
         equals.setOnClickListener(this);
+
         blank1.setOnClickListener(this);
         blank2.setOnClickListener(this);
-        point.setOnClickListener(this);
 
         btn0.setOnClickListener(this);
         btn1.setOnClickListener(this);
@@ -108,18 +109,33 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         String i = input.getText().toString();
         int length = i.length();
         if (length > 0) {
-            if (i.endsWith("+") || i.endsWith("-") || i.endsWith("×") || i.endsWith("÷")) {
+            if (i.endsWith("+") || (i.endsWith("-") && symbol == Symbol.minus) || i.endsWith("×") || i.endsWith("÷")) {
                 input.setText(i.substring(0, length - 1));
                 symbol = Symbol.none;
                 this.checker = Checker.noVal1; //because sa checker function mag uupdate ng val1?
+                display.setText(input.getText().toString());
             }
-            else if (i.endsWith("-")) {
-
-            }
-            else {
+            else if (i.endsWith("-") && symbol != Symbol.minus) {
                 input.setText(i.substring(0, length - 1));
-                if (input.getText().toString().length() > 0) {
+            }
+            else { //when nums are deleted
+                Log.e("handleBackspace()", "else block");
+                input.setText(i.substring(0, length - 1));
+                String newI = input.getText().toString();
+                int newICA = newI.length() - 2; //char at the 2nd to the last input
+                boolean endsWithOperator = newI.endsWith("+") || newI.endsWith("-") || newI.endsWith("×") || newI.endsWith("÷");
+                if (symbol != Symbol.none && !endsWithOperator) {
                     setVal2();
+//                    if (newI.charAt(newICA) == '+' || newI.charAt(newICA) == '-' || newI.charAt(newICA) == '×' || newI.charAt(newICA) == '÷') {
+//                        setVal2();
+//                    }
+                }
+                else if (symbol != Symbol.none && endsWithOperator) {
+                    Log.e("handleBackspace()", "else if block in else");
+                    display.setText(val1.toString());
+                }
+                else if (symbol == Symbol.none && newI.length() > 0) {
+                    display.setText(input.getText().toString());
                 }
             }
         }
@@ -196,8 +212,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         switch (checker) {
             case empty:
             case noVal1:
-                if (input.getText().toString().equals("")) {
-                    input.append("-");
+                if (input.getText().toString().equals("") || input.getText().toString().equals("-")) {
+                    appendIfNotSucceeding(input.getText().toString(),"-");
                 }
                 else { //if - used as an operator not negative sign
                     val1 = Double.parseDouble(input.getText().toString());
@@ -337,6 +353,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             case val1NoVal2:
                 switch (symbol) {
                     case plus:
+                        Log.e("Input string: ", input.getText().toString());
                         val2 = Double.parseDouble(TextUtils.substring(input.getText().toString(),
                                 input.getText().toString().indexOf("+") + 1,
                                 input.getText().toString().length()));
@@ -472,12 +489,15 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btnEquals:
                 clearIfNaN();
-                input.setText(display.getText());
-                display.getText().clear();
-                val1 = Double.parseDouble(input.getText().toString());
-                this.val2Flag = false;
-                this.symbol = Symbol.none;
-                this.checker = Checker.val1NoVal2;
+
+                if (val2Flag) {
+                    input.setText(display.getText());
+                    display.getText().clear();
+                    val1 = Double.parseDouble(input.getText().toString());
+                    this.val2Flag = false;
+                    this.symbol = Symbol.none;
+                    this.checker = Checker.val1NoVal2;
+                }
                 break;
 
             case R.id.btnPoint:
