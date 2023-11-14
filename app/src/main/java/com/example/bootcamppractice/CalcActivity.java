@@ -43,6 +43,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     private EditText display, input;
     private int iresult, ival1, ival2;
     private Double result, val1, val2;
+    private boolean val2Flag = false;
     private boolean isWhole = false;
     private boolean equalsFlag = false;
     private boolean hasValue1 = false;
@@ -103,20 +104,42 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         btn9.setOnClickListener(this);
 
     }
+    public void handleBackspace() {
+        String i = input.getText().toString();
+        int length = i.length();
+        if (length > 0) {
+            if (i.endsWith("+") || i.endsWith("-") || i.endsWith("×") || i.endsWith("÷")) {
+                input.setText(i.substring(0, length - 1));
+                symbol = Symbol.none;
+                this.checker = Checker.noVal1; //because sa checker function mag uupdate ng val1?
+            }
+            else if (i.endsWith("-")) {
+
+            }
+            else {
+                input.setText(i.substring(0, length - 1));
+                if (input.getText().toString().length() > 0) {
+                    setVal2();
+                }
+            }
+        }
+    }
     public void clearIfNaN() {
         if (display.getText().toString().equals("Not a number/Infinity")) {
             input.getText().clear();
             display.getText().clear();
             symbol = Symbol.none;
-            checker = Checker.empty;
+            this.checker = Checker.empty;
             val1 = 0.0;
         }
     }
     public void advanceCheckerStatus() {
-        if (checker == Checker.val1NoVal2) {
-            checker = Checker.val1Val2;
-        } else if (checker == Checker.noVal1) {
-            checker = Checker.val1NoVal2;
+        if (checker == Checker.noVal1 || checker == Checker.empty) {
+            this.checker = Checker.val1NoVal2;
+        } else if (checker == Checker.val1NoVal2){
+            this.checker = Checker.val1Val2;
+        } else if (checker == Checker.val1Val2){
+            this.checker = Checker.val1NoVal2;
         }
     }
     public void appendIfNotSucceeding(String inputString, String appendingChar) {
@@ -127,13 +150,16 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     public void checker(Symbol symVal, String symbol) {
         Log.e("Inside checker()", "checker() function");
         Log.e(String.valueOf(checker), "curr checker val");
-        advanceCheckerStatus();
+        if (val2Flag == true) {
+            advanceCheckerStatus();
+            val2Flag = false;
+        }
         switch (checker) {
             case empty:
                 break;
             case noVal1:
                 val1 = Double.parseDouble(input.getText().toString());
-                checker = Checker.val1NoVal2;
+                advanceCheckerStatus();
                 appendIfNotSucceeding(input.getText().toString(),symbol);
 //                input.append(symbol);
                 display.setText(String.valueOf(val1));
@@ -148,38 +174,35 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 val1 = Double.parseDouble(input.getText().toString());
                 appendIfNotSucceeding(input.getText().toString(),symbol);
 //                input.append(symbol);
-                checker = Checker.val1NoVal2;
                 break;
             case val1Val2:
                 val1 = Double.parseDouble(display.getText().toString());
-                checker = Checker.val1NoVal2;
                 input.setText(String.valueOf(val1));
                 appendIfNotSucceeding(input.getText().toString(),symbol);
-//                input.append(symbol);
+                advanceCheckerStatus();
+                break;
         }
         this.symbol = symVal;
     }
     public void checkerForSubtract() {
         int length = input.getText().length();
         Log.e(String.valueOf(length), "length of input");
-        if (checker == Checker.val1NoVal2) {
-            checker = Checker.val1Val2;
+        Log.e(String.valueOf(val2Flag), "val2Flag");
+        if (val2Flag == true) {
+            advanceCheckerStatus();
+            val2Flag = false;
         }
+        Log.e(String.valueOf(this.checker), "checker status");
         switch (checker) {
             case empty:
-                if (input.getText().toString().equals("")) {
-                    input.append("-");
-                }
-                break;
             case noVal1:
                 if (input.getText().toString().equals("")) {
                     input.append("-");
                 }
-                else {
+                else { //if - used as an operator not negative sign
                     val1 = Double.parseDouble(input.getText().toString());
-                    checker = Checker.val1NoVal2;
+                    advanceCheckerStatus();
                     appendIfNotSucceeding(input.getText().toString(),"-");
-//                    input.append("-");
                     display.setText(String.valueOf(val1));
                     this.symbol = Symbol.minus;
                 }
@@ -188,35 +211,36 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 input.append("-");
                 checker = Checker.val1NoVal2;
                 this.symbol = Symbol.minus;
+//                advanceCheckerStatus();
                 break;
             case val1NoVal2:
-                if (input.getText().toString().contains("+")) {
+                Log.e(String.valueOf(checker), "checker status inside switch");
+                String i = input.getText().toString();
+                Log.e(i, "input string");
+                if (i.endsWith("+") || i.endsWith("×") || i.endsWith("÷")) {
+                    Log.e("here?","here?");
                     appendIfNotSucceeding(input.getText().toString(),"-");
-//                    input.append("-");
                 }
-                else if (input.getText().toString().contains("×")) {
-                    appendIfNotSucceeding(input.getText().toString(),"-");
-//                    input.append("-");
-                }
-                else if (input.getText().toString().contains("÷")) {
-                    appendIfNotSucceeding(input.getText().toString(),"-");
-//                    input.append("-");
-                }
-                else {
+                else { // - used as an operator
+                    Log.e("or here?","or here?");
                     input.setText(String.valueOf(display.getText()));
                     val1 = Double.parseDouble(input.getText().toString());
                     appendIfNotSucceeding(input.getText().toString(),"-");
-//                    input.append("−");
                     this.symbol = Symbol.minus;
                 }
                 break;
             case val1Val2:
-                val1 = Double.parseDouble(display.getText().toString());
-                checker = Checker.val1NoVal2;
-                input.setText(String.valueOf(val1));
-                appendIfNotSucceeding(input.getText().toString(),"-");
-//                input.append("−");
-                this.symbol = Symbol.minus;
+                String inpt = input.getText().toString();
+                if (inpt.endsWith("+") || inpt.endsWith("×") || inpt.endsWith("÷")) {
+                    appendIfNotSucceeding(input.getText().toString(),"-");
+                }
+                else { // - used as an operator
+                    input.setText(String.valueOf(display.getText()));
+                    val1 = Double.parseDouble(input.getText().toString());
+                    appendIfNotSucceeding(input.getText().toString(),"-");
+                    advanceCheckerStatus();
+                    this.symbol = Symbol.minus;
+                }
                 break;
         }
     }
@@ -370,6 +394,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                         Log.e(String.valueOf(val2), "setVal2() val2");
                         break;
                 }
+                val2Flag = true;
 //                checker = Checker.val1Val2;
                 break;
         }
@@ -407,20 +432,15 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("Clicked clear", "clear");
                 input.getText().clear();
                 display.getText().clear();
-                symbol = Symbol.none;
-                checker = Checker.empty;
+                this.val2Flag = false;
+                this.symbol = Symbol.none;
+                this.checker = Checker.empty;
                 val1 = 0.0;
                 break;
 
             case R.id.btnBackspace:
                 clearIfNaN();
-                Log.e("Clicked backspace", "backspace");
-                //check if an operator is deleted then set symbol.none
-                String word = input.getText().toString();
-                int length = word.length();
-                if (length > 0){
-                    input.setText(word.substring(0, length - 1));
-                }
+                handleBackspace();
                 break;
 
             case R.id.btnDivide:
@@ -455,18 +475,12 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 input.setText(display.getText());
                 display.getText().clear();
                 val1 = Double.parseDouble(input.getText().toString());
-                symbol = Symbol.none;
-                checker = Checker.val1NoVal2Equals;
-                Log.e(String.valueOf(val1), "val1 after equals");
-                Log.e(String.valueOf(val2), "val2 after equals");
-                Log.e(String.valueOf(input.getText()), "input value after equals");
-                Log.e(String.valueOf(display.getText()), "display value after equals");
+                this.val2Flag = false;
+                this.symbol = Symbol.none;
+                this.checker = Checker.val1NoVal2;
                 break;
 
             case R.id.btnPoint:
-//                input.append(".");
-//                checker = Checker.val1NoVal2;
-//                revertCheckerStatus();
                 appendIfNotSucceeding(input.getText().toString(), ".");
                 break;
 
@@ -546,6 +560,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         Log.e("Onlickstats symbol(): ", symbol.toString());
         if (val1 != null){
             Log.e("val1 value: ", val1.toString());
+        }
+        if (val2Flag) {
+            Log.e("val2 value: ", val2.toString());
         }
 
     }
