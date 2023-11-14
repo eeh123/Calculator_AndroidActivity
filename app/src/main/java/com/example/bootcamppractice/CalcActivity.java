@@ -104,6 +104,15 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         btn9.setOnClickListener(this);
 
     }
+    public void clearIfNaN() {
+        if (display.getText().toString().equals("Not a number/Infinity")) {
+            input.getText().clear();
+            display.getText().clear();
+            symbol = Symbol.none;
+            checker = Checker.empty;
+            val1 = 0.0;
+        }
+    }
     public void advanceCheckerStatus() {
         if (checker == Checker.val1NoVal2) {
             checker = Checker.val1Val2;
@@ -263,13 +272,16 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             hasValue2 = true;
         }
     }
-    public String checkIfWhole(double result) {        //String.valueOf(result).length() > 15
-        if (result % 1 == 0) {
+    public String checkIfWhole(double result) {
+        Log.e("result: ", String.valueOf(result));
+//        if (Double.isNaN(result)){
+        if (String.valueOf(result).equals("Infinity") || String.valueOf(result).equals("-Infinity")){
+            return "Not a number/Infinity";
+        }
+        else if (result % 1 == 0) {
             if (BigDecimal.valueOf(result).scale() < -3) {
                 BigInteger bIntResult = BigDecimal.valueOf(result).toBigInteger();
-//                String exponentialForm = bIntResult.toString() + "E" + bIntResult.toString().length();
 
-                // Format the result
                 DecimalFormat decimalFormat = new DecimalFormat("0.#############E0"); // Adjust the format as needed
                 String formattedResult = decimalFormat.format(bIntResult);
 
@@ -392,6 +404,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (view.getId()) {
             case R.id.btnClear:
+                clearIfNaN();
                 Log.e("Clicked clear", "clear");
                 input.getText().clear();
                 display.getText().clear();
@@ -401,6 +414,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btnBackspace:
+                clearIfNaN();
                 Log.e("Clicked backspace", "backspace");
                 //check if an operator is deleted then set symbol.none
                 String word = input.getText().toString();
@@ -411,29 +425,34 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btnDivide:
+                clearIfNaN();
                 Log.e("Clicked ÷", "÷");
                 checker(Symbol.divide,"÷");
 //                checker = Checker.val1NoVal2;
                 break;
 
             case R.id.btnMultiply:
+                clearIfNaN();
                 Log.e("Clicked ×", "×");
                 checker(Symbol.multiply,"×");
 //                checker = Checker.val1NoVal2;
                 break;
 
             case R.id.btnSubtract:
+                clearIfNaN();
                 Log.e("Clicked -", "-");
                 checkerForSubtract();
                 break;
 
             case R.id.btnAdd:
+                clearIfNaN();
                 Log.e("Clicked +", "+");
                 checker(Symbol.plus,"+");
 //                checker = Checker.val1NoVal2;
                 break;
 
             case R.id.btnEquals:
+                clearIfNaN();
                 input.setText(display.getText());
                 display.getText().clear();
                 val1 = Double.parseDouble(input.getText().toString());
