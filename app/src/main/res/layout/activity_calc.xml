@@ -50,7 +50,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="10"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="end|bottom"
         android:background="#343434">
@@ -64,7 +64,7 @@
 
             <Button
                 android:id="@+id/btnClear"
-                android:layout_weight="25"
+                android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="90dp"
                 android:text="C"
@@ -74,7 +74,7 @@
 
             <Button
                 android:id="@+id/btnDivide"
-                android:layout_weight="25"
+                android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="90dp"
                 android:text="÷"
@@ -84,7 +84,7 @@
 
             <Button
                 android:id="@+id/btnMultiply"
-                android:layout_weight="25"
+                android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="90dp"
                 android:text="×"
@@ -92,14 +92,24 @@
                 android:textColor="#B3CEE5"
                 android:backgroundTint="#343434"/>
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnBackspace"
-                android:layout_weight="25"
                 android:layout_width="0dp"
                 android:layout_height="90dp"
-                android:src="@drawable/backspace_svg"
-                app:tint="#B3CEE5"
-                android:backgroundTint="#343434"/>
+                android:layout_weight="2"
+                android:backgroundTint="#343434"
+                android:text="⌫"
+                android:textColor="#B3CEE5"
+                android:textSize="40sp" />
+
+            <!--            <ImageButton-->
+<!--                android:id="@+id/btnBackspace"-->
+<!--                android:layout_weight="25"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="90dp"-->
+<!--                android:src="@drawable/backspace_svg"-->
+<!--                app:tint="#B3CEE5"-->
+<!--                android:backgroundTint="#343434"/>-->
 
         </LinearLayout>
 

@@ -37,9 +37,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         val1Val2
     }
     private Checker checker = Checker.empty;
-    private Button clear, divide, multiply, subtract, add, equals, blank1, blank2, point;
+    private Button clear, backspace, divide, multiply, subtract, add, equals, blank1, blank2, point;
     private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0;
-    private ImageButton backspace;
+//    private ImageButton backspace;
     private EditText display, input;
     private int iresult, ival1, ival2;
     private Double result, val1, val2;
