@@ -1,0 +1,62 @@
+Happy Path
+Addition:
+*Whole Numbers - 	        Passed(✔) Failed()
+*Decimal Numbers - 	        Passed(✔) Failed()
+*Mixed - 		            Passed(✔) Failed()
+
+Subtraction:
+*Whole Numbers - 	        Passed(✔) Failed()
+*Decimal Numbers - 	        Passed(✔) Failed()
+*Mixed - 		            Passed(✔) Failed()
+
+Multiplication:
+*Positive Numbers -  	    Passed(✔) Failed()
+*Negative Numbers -  	    Passed(✔) Failed()
+*Whole Numbers - 	        Passed(✔) Failed()
+*Decimal Numbers - 	        Passed(✔) Failed()
+*Mixed - 		            Passed(✔) Failed()
+
+Division:
+*Positive Numbers -  	    Passed(✔) Failed()
+*Negative Numbers -  	    Passed(✔) Failed()
+*Whole Numbers - 	        Passed(✔) Failed()
+*Decimal Numbers - 	        Passed(✔) Failed()
+*Mixed - 		            Passed(✔) Failed()
+
+-------------------------------------------------
+Not So Happy Path
+Random:
+*Large Numbers-		        Passed(✔) Failed()
+  Test Case:
+  987654321098765*987654321*10000000000 = 9.7436366518517E32
+
+*Zero Handling-
+  Test Case:
+  0 + 7 = 7b		        Passed(✔) Failed()
+  10 - 0 = 10		        Passed(✔) Failed()
+  5 * 0 = 0		            Passed(✔) Failed()
+  0 / 5 = 0		            Passed(✔) Failed()
+
+*Division by zero-	        Passed(✔) Failed()
+
+*Combo of Operations-	
+  2 + 3 * 4 - 1 = 13	    Passed() Failed(✔) [PEMDAS]
+  6 / 2 + 1 	= 4	        Passed(✔) Failed() [same order]
+
+*Input Validation-	        Passed(✔) Failed() [Only accepts button inputs]
+
+Addition:
+*Spamming (+) button- 	    Passed(✔) Failed()
+*(+)sign as 1st input- 	    Passed() Failed(✔)
+
+Subtraction:
+*Spamming (-) button- 	    Passed(✔) Failed()
+*(-)sign as 1st input- 	    Passed(✔) Failed()
+
+Multiplication:
+*Spamming (×) button- 	    Passed(✔) Failed()
+*(×)sign as 1st input- 	    Passed() Failed(✔)
+
+Division:
+*Spamming (÷) button- 	    Passed(✔) Failed()
+*(÷)sign as 1st input- 	    Passed() Failed(✔)
