@@ -19,8 +19,8 @@ import java.text.DecimalFormat;
 
 public class CalcActivity extends AppCompatActivity implements View.OnClickListener {
 
-//    private static final String inputPattern = "^[-]?\\d+(\\.\\d+)?([+\\-*/]\\d+(\\.\\d+)?)?$";
-    private static final String inputPattern = "^[-]?\\d+(\\.\\d+)?$";
+    private static final String inputPattern = "^[-]?\\d+(\\.)?(\\d+)?[+\\-*/]?(\\d+)?(\\.)?(\\d+)?$";
+//    private static final String inputPattern = "^[-]?\\d+(\\.\\d+)?$";
     private enum Symbol {
         plus,
         minus,
@@ -78,7 +78,6 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         display = findViewById(R.id.tv_display);
         input = findViewById(R.id.tv_input);
 
-//        input.setEnabled(false);
         display.setEnabled(false);
 
         clear.setOnClickListener(this);

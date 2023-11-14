@@ -30,7 +30,8 @@
             android:singleLine="true"
             android:scrollHorizontally="true"
             android:inputType="text"
-            android:cursorVisible="false"/>
+            android:cursorVisible="false"
+            android:focusable="false"/>
 
         <EditText
             android:id="@+id/tv_display"
