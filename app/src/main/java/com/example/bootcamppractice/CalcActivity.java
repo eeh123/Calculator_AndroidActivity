@@ -1,24 +1,31 @@
 package com.example.bootcamppractice;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.core.content.ContextCompat;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.text.TextUtils;
-import android.widget.Switch;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class CalcActivity extends AppCompatActivity implements View.OnClickListener {
-    private enum Symbol {
+    public enum Symbol {
         plus,
         minus,
         multiply,
@@ -33,18 +40,35 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         val1Val2
     }
     private Checker checker = Checker.empty;
+    private ViewGroup frameLayout;
+    private MotionLayout motionLayout;
+    private FrameLayout container, histContainer;
     private Button clear, backspace, divide, multiply, subtract, add, equals, blank1, blank2, point;
     private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0;
     private EditText display, input;
     private Double result, val1, val2;
     private boolean val2Flag = false;
     private boolean equalsFlag = false;
+    private String operator;
+    private ArrayList<History> histories = new ArrayList<History>();
+    private ArrayList<String> resultHistories = new ArrayList<String>();
+
+    private int mSlop;
+    private float mDownX, mDownY;
+    private boolean mSwiping;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calc);
+
+//        motionLayout.findViewById(R.id.container).requestFocus();
+//        container.findViewById(R.id.container).requestFocus();
+
+        frameLayout = findViewById(R.id.container);
+        container = findViewById(R.id.container);
+        histContainer = findViewById(R.id.histContainer);
 
         clear = findViewById(R.id.btnClear);
         divide = findViewById(R.id.btnDivide);
@@ -93,7 +117,30 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         btn7.setOnClickListener(this);
         btn8.setOnClickListener(this);
         btn9.setOnClickListener(this);
+    }
+    private String symbolToOperator(Symbol s) {
+        switch (s) {
+            case plus:
+                operator = "+";
+                break;
 
+            case minus:
+                operator = "-";
+                break;
+
+            case multiply:
+                operator = "×";
+                break;
+
+            case divide:
+                operator = "÷";
+                break;
+        }
+        return operator;
+    }
+    public void addToArrayHistory(double v1, double v2, Symbol s, double res) {
+        histories.add(new History(v1,v2,symbolToOperator(s)));
+        resultHistories.add(String.valueOf(res));
     }
     public void handleNumInput(String stringNum) {
         String i = input.getText().toString();
@@ -284,7 +331,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                 input.getText().toString().indexOf("+") + 1,
                                 input.getText().toString().length()));
                         result = equation();
+                        addToArrayHistory(val1,val2,symbol,result);
                         display.setText(checkIfWhole(result));
+                        Log.e(histories.toString(), "Histories");
                         break;
 
                     case minus:
@@ -293,6 +342,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                     input.getText().toString().indexOf("-",1) + 1,
                                     input.getText().toString().length()));
                             result = equation();
+                            addToArrayHistory(val1,val2,symbol,result);
                             display.setText(checkIfWhole(result));
                         }
                         else {
@@ -300,6 +350,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                     input.getText().toString().indexOf("-") + 1,
                                     input.getText().toString().length()));
                             result = equation();
+                            addToArrayHistory(val1,val2,symbol,result);
                             display.setText(checkIfWhole(result));
                         }
                         break;
@@ -309,6 +360,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                 input.getText().toString().indexOf("×") + 1,
                                 input.getText().toString().length()));
                         result = equation();
+                        addToArrayHistory(val1,val2,symbol,result);
                         display.setText(checkIfWhole(result));
                         break;
 
@@ -317,6 +369,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                                 input.getText().toString().indexOf("÷") + 1,
                                 input.getText().toString().length()));
                         result = equation();
+                        addToArrayHistory(val1,val2,symbol,result);
                         display.setText(checkIfWhole(result));
                         break;
                 }
@@ -460,6 +513,29 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 handleNumInput("9");
                 setVal2();
                 break;
+        }
+
+
+        for (History history : histories) {
+            TextView tv = new TextView(this);
+            tv.setText(history.toString());
+
+            tv.setWidth(histContainer.getWidth());
+            tv.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            tv.setTextSize(52);
+            tv.setTextColor(Color.WHITE);
+            tv.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+
+//            if(container.getHeight() == View)
+            // Add the EditText to the LinearLayout
+            histContainer.addView(tv);
+
+            // You can set layout parameters if needed
+            // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+            //         ViewGroup.LayoutParams.MATCH_PARENT,
+            //         ViewGroup.LayoutParams.WRAP_CONTENT
+            // );
+            // editText.setLayoutParams(layoutParams);
         }
         input.setSelection(input.getText().length());
     }
