@@ -21,64 +21,73 @@
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent=".4">
 
-
-        <!--  Display  -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/recyclerMotionLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="bottom">
+            app:layoutDescription="@xml/recycler_scene">
 
-            <!--  History Display  -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/histContainer"
+            <!--  Display  -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recyclerContainer"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:foregroundGravity="bottom|clip_vertical"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tv_input"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom">
 
-            <!--  Input Display  -->
-            <EditText
-                android:id="@+id/tv_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:cursorVisible="false"
-                android:inputType="text"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:textAlignment="textEnd"
-                android:textColor="@color/white"
-                android:textSize="52sp"
-                android:background="@null"
-                android:layout_gravity="end|bottom"
-                android:clickable="false"
-                android:focusable="false"
-                app:layout_constraintTop_toBottomOf="@+id/histContainer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-            <EditText
-                android:id="@+id/tv_display"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:singleLine="true"
-                android:textAlignment="textEnd"
-                android:textColor="#b3b3b3"
-                android:textSize="34sp"
-                android:background="@null"
-                android:layout_gravity="end|bottom"
-                android:clickable="false"
-                android:focusable="false"
-                app:layout_constraintTop_toBottomOf="@+id/tv_input"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                <!--  History Display  -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/histContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:alpha="0.6"
+                    android:foregroundGravity="bottom|clip_vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_input"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <!--  Input Display  -->
+                <EditText
+                    android:id="@+id/tv_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:cursorVisible="false"
+                    android:inputType="text"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white"
+                    android:textSize="52sp"
+                    android:background="@null"
+                    android:layout_gravity="end|bottom"
+                    android:clickable="false"
+                    android:focusable="false"
+                    app:layout_constraintTop_toBottomOf="@+id/histContainer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <EditText
+                    android:id="@+id/tv_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:singleLine="true"
+                    android:textAlignment="textEnd"
+                    android:textColor="#b3b3b3"
+                    android:textSize="34sp"
+                    android:background="@null"
+                    android:layout_gravity="end|bottom"
+                    android:clickable="false"
+                    android:focusable="false"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_input"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
     </com.example.bootcamppractice.utils.TouchFrameLayout>
 

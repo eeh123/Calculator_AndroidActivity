@@ -15,12 +15,13 @@ import com.example.bootcamppractice.objects.History;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryViewHolder> {
 
     private Context context;
-    ArrayList<History> histories;
-    ArrayList<String> resultHistories;
+    List<History> histories;
+    List<String> resultHistories;
 
     public HistoryAdapter(Context context, ArrayList<History> histories, ArrayList<String> resultHistories) {
         this.context = context;
@@ -51,9 +52,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryViewHolder> {
         }
     }
 
-    public void setData(ArrayList<History> updatedHistories, ArrayList<String> updatedResults) {
-        Collections.reverse(updatedHistories);
-        Collections.reverse(updatedResults);
+    public void setData(List<History> updatedHistories, List<String> updatedResults) {
+//        Collections.reverse(updatedHistories);
+//        Collections.reverse(updatedResults);
         this.histories = updatedHistories;
         this.resultHistories = updatedResults;
         notifyDataSetChanged();

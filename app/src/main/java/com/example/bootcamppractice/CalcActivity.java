@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CalcActivity extends AppCompatActivity implements View.OnClickListener {
     public enum Symbol {
@@ -138,11 +139,16 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     public void addToArrayHistory(double v1, double v2, Symbol s, double res) {
         histories.add(new History(v1,v2,symbolToOperator(s)));
         resultHistories.add(String.valueOf(res));
-        historyAdapter.setData(histories, resultHistories);
 
         if (histories.size() > 1) {
-            int lastIndex = histories.size() - 1;
-            histContainer.scrollToPosition(lastIndex);
+            int histSize = histories.size();
+            int resSize = resultHistories.size();
+            List histSublist = histories.subList(0, histSize - 1);
+            List resSublist = resultHistories.subList(0, resSize - 1);
+            historyAdapter.setData(histSublist, resSublist);
+
+            //scrolling recyclerview
+            histContainer.scrollToPosition(histSublist.size() - 1);
         }
     }
     public void handleNumInput(String stringNum) {

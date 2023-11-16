@@ -60,3 +60,7 @@ Multiplication:
 Division:
 *Spamming (÷) button- 	    Passed(✔) Failed()
 *(÷)sign as 1st input- 	    Passed() Failed(✔)
+
+Not Implemented:
+History visible only when display area is swiped down
+Touch gesture when display area is "collapsed" should adjust when display area is "expanded"

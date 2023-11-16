@@ -54,15 +54,14 @@ public class TouchFrameLayout extends FrameLayout implements NestedScrollingPare
         int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                // Handle the touch down event
-                return true; // Intercept the touch event
-
             case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_UP:
+                // Handle the touch down event
                 // Handle the touch move event
+                // Handle the touch up event
                 return true; // Intercept the touch event
 
-            case MotionEvent.ACTION_UP:
-                // Handle the touch up event
+            case MotionEvent.ACTION_OUTSIDE:
                 return true; // Intercept the touch event
 
             default:

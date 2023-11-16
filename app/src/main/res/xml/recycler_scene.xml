@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/motionLayout">
+    android:id="@+id/recyclerMotionLayout">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
         motion:duration="1000"
         motion:motionInterpolator="linear" >
-
-        <OnSwipe
-            motion:touchAnchorId="@+id/container"
-            motion:touchAnchorSide="bottom"
-            motion:dragDirection="dragDown" />
 
         <KeyFrameSet>
             <KeyPosition
@@ -31,36 +26,23 @@
                 motion:framePosition="0"
                 motion:motionTarget="@id/histContainer"
                 motion:attributeName="alpha"
-                android:value="0"/>
+                android:value="0" />
 
             <KeyAttribute
-                motion:framePosition="85"
+                motion:framePosition="100"
                 motion:motionTarget="@id/histContainer"
                 motion:attributeName="alpha"
-                android:value="1"/>
+                android:value="1" />
         </KeyFrameSet>
 
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:foregroundGravity="bottom|clip_vertical"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintHeight_default="percent"
-            motion:layout_constraintHeight_percent=".4">
-            <CustomAttribute
-                motion:attributeName="BackgroundColor"
-                motion:customColorValue="@color/displayBackground" />
-        </Constraint>
-
-        <Constraint
             android:id="@+id/histContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:alpha="0.6"
+            android:alpha="0"
             android:foregroundGravity="bottom|clip_vertical"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintBottom_toTopOf="@+id/tv_input"
@@ -70,18 +52,6 @@
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <Constraint
-            android:id="@id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:foregroundGravity="bottom|clip_vertical"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent">
-            <CustomAttribute
-                motion:attributeName="BackgroundColor"
-                motion:customColorValue="@color/displayBackground" />
-        </Constraint>
-
         <Constraint
             android:id="@+id/histContainer"
             android:layout_width="match_parent"
