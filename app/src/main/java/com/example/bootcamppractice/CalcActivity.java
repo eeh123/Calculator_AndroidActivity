@@ -2,21 +2,25 @@ package com.example.bootcamppractice;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.bootcamppractice.adapter.HistoryAdapter;
+import com.example.bootcamppractice.objects.History;
+import com.example.bootcamppractice.utils.TouchFrameLayout;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -40,9 +44,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         val1Val2
     }
     private Checker checker = Checker.empty;
-    private ViewGroup frameLayout;
     private MotionLayout motionLayout;
-    private FrameLayout container, histContainer;
+    private TouchFrameLayout container;
+    private RecyclerView histContainer;
     private Button clear, backspace, divide, multiply, subtract, add, equals, blank1, blank2, point;
     private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0;
     private EditText display, input;
@@ -52,23 +56,47 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     private String operator;
     private ArrayList<History> histories = new ArrayList<History>();
     private ArrayList<String> resultHistories = new ArrayList<String>();
-
-    private int mSlop;
-    private float mDownX, mDownY;
-    private boolean mSwiping;
-
+    private HistoryAdapter historyAdapter = new HistoryAdapter(this, histories, resultHistories);
+    private ViewTreeObserver vto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calc);
 
-//        motionLayout.findViewById(R.id.container).requestFocus();
-//        container.findViewById(R.id.container).requestFocus();
 
-        frameLayout = findViewById(R.id.container);
         container = findViewById(R.id.container);
         histContainer = findViewById(R.id.histContainer);
+
+
+//        container.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//            @Override
+//            public void onLayoutChange(
+//                    View v, int left, int top, int right, int bottom,
+//                    int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//
+//                vto = container.getViewTreeObserver();
+//                vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//                    @Override
+//                    public boolean onPreDraw() {
+//                        // Remove the listener to avoid multiple callbacks
+//                        container.getViewTreeObserver().removeOnPreDrawListener(this);
+//
+//                        // Get the height of the FrameLayout
+//                        int frameLayoutHeight = container.getHeight();
+//
+//                        // Set the height of the child view as a percentage of the FrameLayout height
+//                        int childViewHeight = (int) (frameLayoutHeight * 0.52); // Adjust the percentage as needed
+//                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) histContainer.getLayoutParams();
+//                        layoutParams.height = childViewHeight;
+//                        histContainer.setLayoutParams(layoutParams);
+//                        return true;
+//                    }
+//                });
+//            }
+//        });
+        histContainer.setLayoutManager(new LinearLayoutManager(this));
+        histContainer.setAdapter(historyAdapter);
 
         clear = findViewById(R.id.btnClear);
         divide = findViewById(R.id.btnDivide);
@@ -118,6 +146,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         btn8.setOnClickListener(this);
         btn9.setOnClickListener(this);
     }
+
     private String symbolToOperator(Symbol s) {
         switch (s) {
             case plus:
@@ -141,6 +170,12 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     public void addToArrayHistory(double v1, double v2, Symbol s, double res) {
         histories.add(new History(v1,v2,symbolToOperator(s)));
         resultHistories.add(String.valueOf(res));
+        historyAdapter.setData(histories, resultHistories);
+
+        if (histories.size() > 1) {
+            int lastIndex = histories.size() - 1;
+            histContainer.scrollToPosition(lastIndex);
+        }
     }
     public void handleNumInput(String stringNum) {
         String i = input.getText().toString();
@@ -514,29 +549,10 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 setVal2();
                 break;
         }
-
-
-        for (History history : histories) {
-            TextView tv = new TextView(this);
-            tv.setText(history.toString());
-
-            tv.setWidth(histContainer.getWidth());
-            tv.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-            tv.setTextSize(52);
-            tv.setTextColor(Color.WHITE);
-            tv.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-
-//            if(container.getHeight() == View)
-            // Add the EditText to the LinearLayout
-            histContainer.addView(tv);
-
-            // You can set layout parameters if needed
-            // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-            //         ViewGroup.LayoutParams.MATCH_PARENT,
-            //         ViewGroup.LayoutParams.WRAP_CONTENT
-            // );
-            // editText.setLayoutParams(layoutParams);
-        }
         input.setSelection(input.getText().length());
+
+
+        Log.e(checker.toString(), "checker status");
+        Log.e(symbol.toString(), "symbol status");
     }
 }

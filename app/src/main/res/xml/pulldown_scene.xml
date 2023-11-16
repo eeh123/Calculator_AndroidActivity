@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:motion="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/motionLayout">
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
         motion:duration="1000"
         motion:motionInterpolator="linear" >
-
         <OnSwipe
             motion:touchAnchorId="@+id/container"
             motion:touchAnchorSide="bottom"
             motion:dragDirection="dragDown" />
+
     </Transition>
+
+
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
@@ -24,9 +25,19 @@
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintHeight_default="percent"
             motion:layout_constraintHeight_percent=".4">
+            <PropertySet android:alpha="0" />
             <CustomAttribute
                 motion:attributeName="BackgroundColor"
                 motion:customColorValue="@color/displayBackground" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/histContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:foregroundGravity="bottom|clip_vertical"
+            android:layout_gravity="top">
+<!--            <PropertySet android:alpha="0" />-->
         </Constraint>
     </ConstraintSet>
 
@@ -38,9 +49,19 @@
             android:foregroundGravity="bottom|clip_vertical"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent">
+            <PropertySet android:alpha="1"/>
             <CustomAttribute
                 motion:attributeName="BackgroundColor"
-                motion:customColorValue="@color/teal_700" />
+                motion:customColorValue="@color/displayBackground" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/histContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:foregroundGravity="bottom|clip_vertical"
+            android:layout_gravity="top">
+<!--            <PropertySet android:alpha="1"/>-->
         </Constraint>
     </ConstraintSet>
 
