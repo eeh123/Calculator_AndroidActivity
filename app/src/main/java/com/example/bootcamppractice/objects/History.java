@@ -1,4 +1,4 @@
-package com.example.bootcamppractice;
+package com.example.bootcamppractice.objects;
 
 public class History {
     private double value1, value2;
