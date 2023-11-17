@@ -49,25 +49,25 @@ public class TouchFrameLayout extends FrameLayout implements NestedScrollingPare
 
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        int action = ev.getAction();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                // Handle the touch down event
-                return true; // Intercept the touch event
-
-            case MotionEvent.ACTION_MOVE:
-                // Handle the touch move event
-                return true; // Intercept the touch event
-
-            case MotionEvent.ACTION_UP:
-                // Handle the touch up event
-                return true; // Intercept the touch event
-
-            default:
-                // Don't intercept other touch events
-                return false;
-        }
-    }
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent ev) {
+//        int action = ev.getAction();
+//        switch (action) {
+//            case MotionEvent.ACTION_DOWN:
+//                // Handle the touch down event
+//                return true; // Intercept the touch event
+//
+//            case MotionEvent.ACTION_MOVE:
+//                // Handle the touch move event
+//                return true; // Intercept the touch event
+//
+//            case MotionEvent.ACTION_UP:
+//                // Handle the touch up event
+//                return true; // Intercept the touch event
+//
+//            default:
+//                // Don't intercept other touch events
+//                return false;
+//        }
+//    }
 }

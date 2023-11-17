@@ -6,63 +6,79 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
         motion:duration="1000"
-        motion:motionInterpolator="linear" >
+        motion:motionInterpolator="linear">
         <OnSwipe
             motion:touchAnchorId="@+id/container"
             motion:touchAnchorSide="bottom"
             motion:dragDirection="dragDown" />
-
     </Transition>
+
+<!--    <Transition-->
+<!--        motion:constraintSetEnd="@+id/expanded"-->
+<!--        motion:constraintSetStart="@+id/collapsed"-->
+<!--        motion:duration="1000"-->
+<!--        motion:motionInterpolator="linear" >-->
+<!--        <OnSwipe-->
+<!--            motion:touchAnchorId="@+id/container"-->
+<!--            motion:touchAnchorSide="bottom"-->
+<!--            motion:dragDirection="dragDown"/>-->
+<!--    </Transition>-->
 
 
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
-            android:id="@+id/container"
+            android:id="@+id/pulldownContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:foregroundGravity="bottom|clip_vertical"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintHeight_default="percent"
             motion:layout_constraintHeight_percent=".4">
-            <PropertySet android:alpha="0" />
+<!--            <PropertySet android:alpha="0" />-->
             <CustomAttribute
                 motion:attributeName="BackgroundColor"
                 motion:customColorValue="@color/displayBackground" />
-        </Constraint>
-
-        <Constraint
-            android:id="@+id/histContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:foregroundGravity="bottom|clip_vertical"
-            android:layout_gravity="top">
-<!--            <PropertySet android:alpha="0" />-->
         </Constraint>
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            android:id="@id/container"
+            android:id="@id/pulldownContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:foregroundGravity="bottom|clip_vertical"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent">
-            <PropertySet android:alpha="1"/>
+<!--            <PropertySet android:alpha="1"/>-->
             <CustomAttribute
                 motion:attributeName="BackgroundColor"
                 motion:customColorValue="@color/displayBackground" />
         </Constraint>
-
-        <Constraint
-            android:id="@+id/histContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:foregroundGravity="bottom|clip_vertical"
-            android:layout_gravity="top">
-<!--            <PropertySet android:alpha="1"/>-->
-        </Constraint>
     </ConstraintSet>
+
+<!--    <ConstraintSet android:id="@+id/collapsed">-->
+<!--        <Constraint-->
+<!--            android:id="@+id/histContainer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:foregroundGravity="bottom|clip_vertical"-->
+<!--            android:layout_gravity="top"-->
+<!--            motion:layout_constraintHeight_percent="0.5">-->
+<!--            <PropertySet android:alpha="0" />-->
+<!--        </Constraint>-->
+<!--    </ConstraintSet>-->
+
+<!--    <ConstraintSet android:id="@+id/expanded">-->
+<!--        <Constraint-->
+<!--            android:id="@+id/histContainer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:foregroundGravity="bottom|clip_vertical"-->
+<!--            android:layout_gravity="top"-->
+<!--            motion:layout_constraintHeight_percent="0.8">-->
+<!--            <PropertySet android:alpha="1" />-->
+<!--        </Constraint>-->
+<!--    </ConstraintSet>-->
 
 </MotionScene>

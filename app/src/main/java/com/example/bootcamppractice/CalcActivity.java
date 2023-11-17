@@ -85,11 +85,33 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
 //                        // Get the height of the FrameLayout
 //                        int frameLayoutHeight = container.getHeight();
 //
-//                        // Set the height of the child view as a percentage of the FrameLayout height
-//                        int childViewHeight = (int) (frameLayoutHeight * 0.52); // Adjust the percentage as needed
-//                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) histContainer.getLayoutParams();
-//                        layoutParams.height = childViewHeight;
-//                        histContainer.setLayoutParams(layoutParams);
+//                        if (container.getHeight() < 750) {
+//                            // Set the height of the child view as a percentage of the FrameLayout height
+//                            int childViewHeight = (int) (frameLayoutHeight * 0.52); // Adjust the percentage as needed
+//                            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) histContainer.getLayoutParams();
+//                            layoutParams.height = childViewHeight;
+//                            histContainer.setLayoutParams(layoutParams);
+//                        } else if (container.getHeight() < 1000) {
+//                            int childViewHeight = (int) (frameLayoutHeight * 0.58);
+//                            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) histContainer.getLayoutParams();
+//                            layoutParams.height = childViewHeight;
+//                            histContainer.setLayoutParams(layoutParams);
+//                        } else if (container.getHeight() < 1200) {
+//                            int childViewHeight = (int) (frameLayoutHeight * 0.62);
+//                            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) histContainer.getLayoutParams();
+//                            layoutParams.height = childViewHeight;
+//                            histContainer.setLayoutParams(layoutParams);
+//                        } else if (container.getHeight() < 1500) {
+//                            int childViewHeight = (int) (frameLayoutHeight * 0.7);
+//                            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) histContainer.getLayoutParams();
+//                            layoutParams.height = childViewHeight;
+//                            histContainer.setLayoutParams(layoutParams);
+//                        } else {
+//                            int childViewHeight = (int) (frameLayoutHeight * 0.8);
+//                            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) histContainer.getLayoutParams();
+//                            layoutParams.height = childViewHeight;
+//                            histContainer.setLayoutParams(layoutParams);
+//                        }
 //                        return true;
 //                    }
 //                });
