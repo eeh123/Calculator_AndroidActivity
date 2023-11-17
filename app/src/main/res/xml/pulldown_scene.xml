@@ -21,48 +21,53 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:foregroundGravity="bottom|clip_vertical"
-            motion:layout_constraintTop_toTopOf="parent"
+            android:elevation="5dp"
+            android:alpha=".7"
             motion:layout_constraintHeight_default="percent"
             motion:layout_constraintHeight_percent=".4">
-            <PropertySet android:alpha="0" />
+<!--            <PropertySet android:visibility="visible"/>-->
             <CustomAttribute
                 motion:attributeName="BackgroundColor"
                 motion:customColorValue="@color/displayBackground" />
         </Constraint>
 
-        <Constraint
-            android:id="@+id/histContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:foregroundGravity="bottom|clip_vertical"
-            android:layout_gravity="top">
-<!--            <PropertySet android:alpha="0" />-->
-        </Constraint>
+<!--        <Constraint-->
+<!--            android:id="@+id/histContainer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            motion:layout_constraintTop_toTopOf="parent"-->
+<!--            motion:layout_constraintHeight_default="percent"-->
+<!--            motion:layout_constraintHeight_percent=".45"-->
+<!--            android:alpha="0" >-->
+<!--&lt;!&ndash;            <PropertySet android:alpha="0" />&ndash;&gt;-->
+<!--        </Constraint>-->
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            android:id="@id/container"
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:foregroundGravity="bottom|clip_vertical"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent">
-            <PropertySet android:alpha="1"/>
+            android:layout_height="0dp"
+            android:elevation="5dp"
+            android:alpha="1"
+            motion:layout_constraintHeight_default="percent"
+            motion:layout_constraintHeight_percent="1">
+<!--            <PropertySet android:visibility="visible"/>-->
             <CustomAttribute
                 motion:attributeName="BackgroundColor"
                 motion:customColorValue="@color/displayBackground" />
         </Constraint>
 
-        <Constraint
-            android:id="@+id/histContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:foregroundGravity="bottom|clip_vertical"
-            android:layout_gravity="top">
-<!--            <PropertySet android:alpha="1"/>-->
-        </Constraint>
+<!--        <Constraint-->
+<!--            android:id="@+id/histContainer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            motion:layout_constraintTop_toTopOf="parent"-->
+<!--            motion:layout_constraintHeight_default="percent"-->
+<!--            motion:layout_constraintHeight_percent=".8"-->
+<!--            android:alpha="1" >-->
+<!--&lt;!&ndash;            <PropertySet android:alpha="1"/>&ndash;&gt;-->
+<!--        </Constraint>-->
     </ConstraintSet>
 
 </MotionScene>

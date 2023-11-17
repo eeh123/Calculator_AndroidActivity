@@ -16,63 +16,91 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:elevation="5dp"
-        android:foregroundGravity="bottom|clip_vertical"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".4">
+        app:layout_constraintHeight_percent=".4" >
 
-        <androidx.constraintlayout.motion.widget.MotionLayout
-            android:id="@+id/motionLayout2"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutDescription="@xml/pulldown_scene">
+            android:layout_height="match_parent">
 
             <!--  History Display  -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/histContainer"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:foregroundGravity="bottom|clip_vertical"
-                android:layout_gravity="top"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-        </androidx.constraintlayout.motion.widget.MotionLayout>
+                app:layout_constraintBottom_toTopOf="@+id/tv_currInput"
+                app:layout_constraintHeight_default="percent"
+                app:layout_constraintHeight_percent=".8" />
 
-        <!--  Input Display  -->
-        <EditText
-            android:id="@+id/tv_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp"
-            android:layout_gravity="end|bottom"
-            android:cursorVisible="false"
-            android:inputType="text"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:textAlignment="textEnd"
-            android:textColor="@color/white"
-            android:textSize="52sp"
-            android:background="@null"
-            android:clickable="false"
-            android:focusable="false"
-            app:layout_constraintTop_toBottomOf="@id/histContainer"/>
-        <EditText
-            android:id="@+id/tv_display"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_gravity="end|bottom"
-            android:singleLine="true"
-            android:textAlignment="textEnd"
-            android:textColor="#b3b3b3"
-            android:textSize="34sp"
-            android:background="@null"
-            android:clickable="false"
-            android:focusable="false"
-            app:layout_constraintTop_toBottomOf="@id/tv_input"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            <!--  Dupe Input Display  -->
+            <EditText
+                android:id="@+id/tv_currInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_gravity="end|bottom"
+                android:cursorVisible="false"
+                android:inputType="text"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="52sp"
+                android:background="@null"
+                android:clickable="false"
+                android:focusable="false"
+                app:layout_constraintBottom_toTopOf="@id/tv_currDisplay"/>
+            <EditText
+                android:id="@+id/tv_currDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_gravity="end|bottom"
+                android:singleLine="true"
+                android:textAlignment="textEnd"
+                android:textColor="#b3b3b3"
+                android:textSize="34sp"
+                android:background="@null"
+                android:clickable="false"
+                android:focusable="false"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.example.bootcamppractice.utils.TouchFrameLayout>
+
+    <!--  Input Display  -->
+    <EditText
+        android:id="@+id/tv_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_gravity="end|bottom"
+        android:cursorVisible="false"
+        android:inputType="text"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="52sp"
+        android:background="@null"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintBottom_toTopOf="@id/tv_display"/>
+    <EditText
+        android:id="@+id/tv_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_gravity="end|bottom"
+        android:singleLine="true"
+        android:textAlignment="textEnd"
+        android:textColor="#b3b3b3"
+        android:textSize="34sp"
+        android:background="@null"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintBottom_toTopOf="@id/buttonContainer"/>
 
     <!--  Buttons  -->
     <LinearLayout

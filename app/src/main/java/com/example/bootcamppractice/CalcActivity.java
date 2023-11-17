@@ -49,7 +49,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView histContainer;
     private Button clear, backspace, divide, multiply, subtract, add, equals, blank1, blank2, point;
     private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0;
-    private EditText display, input;
+    private EditText display, input, currDisplay, currInput;
     private Double result, val1, val2;
     private boolean val2Flag = false;
     private boolean equalsFlag = false;
@@ -118,6 +118,8 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         btn8 = findViewById(R.id.btn8);
         btn9 = findViewById(R.id.btn9);
         backspace = findViewById(R.id.btnBackspace);
+        currDisplay = findViewById(R.id.tv_currDisplay);
+        currInput = findViewById(R.id.tv_currInput);
         display = findViewById(R.id.tv_display);
         input = findViewById(R.id.tv_input);
 
@@ -184,9 +186,12 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             this.equalsFlag = false;
             this.checker = Checker.empty;
             input.getText().clear();
+            currInput.getText().clear();
             input.append(stringNum);
+            currInput.append(stringNum);
         } else {
             input.append(stringNum);
+            currInput.append(stringNum);
         }
     }
     public void handleBackspace() {
@@ -195,15 +200,19 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
         if (length > 0) {
             if (i.endsWith("+") || (i.endsWith("-") && symbol == Symbol.minus) || i.endsWith("×") || i.endsWith("÷")) {
                 input.setText(i.substring(0, length - 1));
+                currInput.setText(i.substring(0, length - 1));
                 symbol = Symbol.none;
                 this.checker = Checker.noVal1;
                 display.setText(input.getText().toString());
+                currDisplay.setText(input.getText().toString());
             }
             else if (i.endsWith("-") && symbol != Symbol.minus) {
                 input.setText(i.substring(0, length - 1));
+                currInput.setText(i.substring(0, length - 1));
             }
             else { //when nums are deleted
                 input.setText(i.substring(0, length - 1));
+                currInput.setText(i.substring(0, length - 1));
                 String newI = input.getText().toString();
                 boolean endsWithOperator = newI.endsWith("+") || newI.endsWith("-") || newI.endsWith("×") || newI.endsWith("÷");
                 if (symbol != Symbol.none && !endsWithOperator) {
@@ -211,9 +220,11 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else if (symbol != Symbol.none && endsWithOperator) {
                     display.setText(checkIfWhole(val1));
+                    currDisplay.setText(checkIfWhole(val1));
                 }
                 else if (symbol == Symbol.none && newI.length() > 0) {
                     display.setText(input.getText().toString());
+                    currDisplay.setText(input.getText().toString());
                 }
             }
         }
@@ -221,7 +232,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     public void clearIfNaN() {
         if (display.getText().toString().equals("Not a number/Infinity")) {
             input.getText().clear();
+            currInput.getText().clear();
             display.getText().clear();
+            currDisplay.getText().clear();
             symbol = Symbol.none;
             this.checker = Checker.empty;
             val1 = 0.0;
@@ -239,6 +252,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
     public void appendIfNotSucceeding(String inputString, String appendingChar) {
         if (!(inputString.endsWith(appendingChar))) {
             input.append(appendingChar);
+            currInput.append(appendingChar);
         }
     }
     public void checker(Symbol symVal, String symbol) {
@@ -254,6 +268,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 advanceCheckerStatus();
                 appendIfNotSucceeding(input.getText().toString(),symbol);
                 display.setText(String.valueOf(val1));
+                currDisplay.setText(String.valueOf(val1));
                 break;
             case val1NoVal2:
                 if (equalsFlag) {
@@ -262,11 +277,13 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
                 input.setText(String.valueOf(display.getText()));
+                currInput.setText(String.valueOf(display.getText()));
                 val1 = Double.parseDouble(display.getText().toString());
                 appendIfNotSucceeding(input.getText().toString(),symbol);
                 break;
             case val1Val2:
                 input.setText(String.valueOf(display.getText()));
+                currInput.setText(String.valueOf(display.getText()));
                 val1 = Double.parseDouble(input.getText().toString());
                 appendIfNotSucceeding(input.getText().toString(),symbol);
                 advanceCheckerStatus();
@@ -290,6 +307,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 } else { //if - used as an operator not negative sign
                     val1 = Double.parseDouble(input.getText().toString());
                     display.setText(input.getText().toString());
+                    currDisplay.setText(input.getText().toString());
                     advanceCheckerStatus();
                     appendIfNotSucceeding(input.getText().toString(),"-");
                     this.symbol = Symbol.minus;
@@ -308,6 +326,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     }
                     input.setText(String.valueOf(display.getText()));
+                    currInput.setText(String.valueOf(display.getText()));
                     val1 = Double.parseDouble(input.getText().toString());
                     appendIfNotSucceeding(input.getText().toString(),"-");
                     this.symbol = Symbol.minus;
@@ -320,6 +339,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else { // - used as an operator
                     input.setText(String.valueOf(display.getText()));
+                    currInput.setText(String.valueOf(display.getText()));
                     val1 = Double.parseDouble(input.getText().toString());
                     appendIfNotSucceeding(input.getText().toString(),"-");
                     advanceCheckerStatus();
@@ -356,6 +376,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             case empty:
             case noVal1:
                 display.setText(input.getText());
+                currDisplay.setText(input.getText());
                 checker = Checker.noVal1;
                 break;
 
@@ -368,6 +389,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                         result = equation();
                         addToArrayHistory(val1,val2,symbol,result);
                         display.setText(checkIfWhole(result));
+                        currDisplay.setText(checkIfWhole(result));
                         Log.e(histories.toString(), "Histories");
                         break;
 
@@ -379,6 +401,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                             result = equation();
                             addToArrayHistory(val1,val2,symbol,result);
                             display.setText(checkIfWhole(result));
+                            currDisplay.setText(checkIfWhole(result));
                         }
                         else {
                             val2 = Double.parseDouble(TextUtils.substring(input.getText().toString(),
@@ -387,6 +410,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                             result = equation();
                             addToArrayHistory(val1,val2,symbol,result);
                             display.setText(checkIfWhole(result));
+                            currDisplay.setText(checkIfWhole(result));
                         }
                         break;
 
@@ -397,6 +421,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                         result = equation();
                         addToArrayHistory(val1,val2,symbol,result);
                         display.setText(checkIfWhole(result));
+                        currDisplay.setText(checkIfWhole(result));
                         break;
 
                     case divide:
@@ -406,6 +431,7 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
                         result = equation();
                         addToArrayHistory(val1,val2,symbol,result);
                         display.setText(checkIfWhole(result));
+                        currDisplay.setText(checkIfWhole(result));
                         break;
                 }
                 val2Flag = true;
@@ -439,7 +465,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnClear:
                 clearIfNaN();
                 input.getText().clear();
+                currInput.getText().clear();
                 display.getText().clear();
+                currDisplay.getText().clear();
                 this.val2Flag = false;
                 this.symbol = Symbol.none;
                 this.checker = Checker.empty;
@@ -476,7 +504,9 @@ public class CalcActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (val2Flag) {
                     input.setText(display.getText());
+                    currInput.setText(display.getText());
                     display.getText().clear();
+                    currDisplay.getText().clear();
                     val1 = Double.parseDouble(input.getText().toString());
                     this.val2Flag = false;
                     this.equalsFlag = true;
